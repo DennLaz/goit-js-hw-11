@@ -1,0 +1,58 @@
+.gallery {
+  padding: 20px 0;
+  // text-align: center;
+}
+
+.photo-card {
+  display: inline-flex;
+  gap: 20px;
+  flex-direction: column;
+  padding: 0 10px;
+}
+
+input {
+  height: 40px;
+  flex-grow: 1;
+  font-size: 18px;
+  padding-left: 15px;
+  border: 1px solid #303030;
+  border-radius: 6px;
+}
+
+form button {
+  border: none;
+  padding: 10px 20px;
+  background-color: rgb(2, 235, 235);
+  color: rgb(255, 115, 0);
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.search-form {
+  display: flex;
+  width: 600px;
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+
+.load-more {
+  display: block;
+  margin: 0 auto;
+  height: 40px;
+  width: 200px;
+  border-radius: 0 40px;
+  border: none;
+  color: rgb(255, 115, 0);
+  background-color: rgb(2, 235, 235);
+  margin-bottom: 30px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.load-more.is-hidden {
+  display: none;
+}
+
+.text {
+  font-weight: 100;
+}
