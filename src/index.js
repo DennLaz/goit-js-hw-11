@@ -18,61 +18,116 @@ let perPageSum;
 let inputValue = null;
 let lightbox;
 
-function onSubmitSearchImages(e) {
+async function onSubmitSearchImages(e) {
   e.preventDefault();
+
   inputValue = e.currentTarget.elements['searchQuery'].value;
+
+  btnLoadMoreEl.classList.add('is-hidden');
 
   paxabeyApi.page = 1;
 
   perPageSum = paxabeyApi.perPage;
 
-  paxabeyApi
-    .searchImage(inputValue)
-    .then(({ data } = {}) => {
-      if (data.hits.length === 0) {
-        return Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
-      }
+  try {
+    const { data } = await paxabeyApi.searchImage(inputValue);
 
-      if (galleryEl.innerHTML !== '') {
-        Notify.success(`Hooray! We found ${data.totalHits} images.`);
-      }
+    if (data.hits.length === 0) {
+      return Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    }
 
-      galleryEl.innerHTML = templateFunction(data.hits);
-      lightbox = new SimpleLightbox('.gallery a');
+    if (galleryEl.innerHTML !== '') {
+      Notify.success(`Hooray! We found ${data.totalHits} images.`);
+    }
 
-      if (data.hits.length >= paxabeyApi.perPage) {
-        btnLoadMoreEl.classList.remove('is-hidden');
-      }
-    })
-    .catch(error => {
-      console.log(error);
-    });
+    if (data.hits.length < perPageSum) {
+      Notify.info("We're sorry, but you've reached the end of search results.");
+    }
+
+    galleryEl.innerHTML = templateFunction(data.hits);
+
+    lightbox = new SimpleLightbox('.gallery a');
+
+    if (data.hits.length >= paxabeyApi.perPage) {
+      btnLoadMoreEl.classList.remove('is-hidden');
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  // paxabeyApi
+  //   .searchImage(inputValue)
+  //   .then(({ data } = {}) => {
+  // if (data.hits.length === 0) {
+  //   return Notify.failure(
+  //     'Sorry, there are no images matching your search query. Please try again.'
+  //   );
+  // }
+
+  // if (galleryEl.innerHTML !== '') {
+  //   Notify.success(`Hooray! We found ${data.totalHits} images.`);
+  // }
+
+  // galleryEl.innerHTML = templateFunction(data.hits);
+
+  // lightbox = new SimpleLightbox('.gallery a');
+
+  // if (data.hits.length >= paxabeyApi.perPage) {
+  //   btnLoadMoreEl.classList.remove('is-hidden');
+  // }
+  // })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
 }
 
-function onClickLoadMoreBtn(e) {
+async function onClickLoadMoreBtn(e) {
   paxabeyApi.page += 1;
-  paxabeyApi
-    .searchImage(inputValue)
-    .then(({ data } = {}) => {
-      perPageSum += data.hits.length;
+  try {
+    const { data } = await paxabeyApi.searchImage(inputValue);
 
-      galleryEl.insertAdjacentHTML('beforeend', templateFunction(data.hits));
+    perPageSum += data.hits.length;
 
-      lightbox.refresh();
+    galleryEl.insertAdjacentHTML('beforeend', templateFunction(data.hits));
 
-      console.log(perPageSum);
-      console.log(data.totalHits);
+    lightbox.refresh();
 
-      if (perPageSum === data.totalHits) {
-        btnLoadMoreEl.classList.add('is-hidden');
-        return Notify.info(
-          "We're sorry, but you've reached the end of search results."
-        );
-      }
-    })
-    .catch(error => {
-      console.log(error);
-    });
+    console.log(perPageSum);
+    console.log(data.totalHits);
+
+    if (perPageSum >= data.totalHits) {
+      btnLoadMoreEl.classList.add('is-hidden');
+      return Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  // paxabeyApi
+  //   .searchImage(inputValue)
+  //   .then(({ data } = {}) => {
+  //     console.log(data);
+  // perPageSum += data.hits.length;
+
+  // galleryEl.insertAdjacentHTML('beforeend', templateFunction(data.hits));
+
+  // lightbox.refresh();
+
+  // console.log(perPageSum);
+  // console.log(data.totalHits);
+
+  // if (perPageSum >= data.totalHits) {
+  //   btnLoadMoreEl.classList.add('is-hidden');
+  //   return Notify.info(
+  //     "We're sorry, but you've reached the end of search results."
+  //   );
+  // }
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //   });
 }
