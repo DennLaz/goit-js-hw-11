@@ -14,14 +14,17 @@ btnLoadMoreEl.addEventListener('click', onClickLoadMoreBtn);
 
 const paxabeyApi = new PixabeyApi();
 
-let perPage = paxabeyApi.perPage;
+let perPageSum;
 let inputValue = null;
+let lightbox;
 
 function onSubmitSearchImages(e) {
   e.preventDefault();
   inputValue = e.currentTarget.elements['searchQuery'].value;
 
   paxabeyApi.page = 1;
+
+  perPageSum = paxabeyApi.perPage;
 
   paxabeyApi
     .searchImage(inputValue)
@@ -37,12 +40,11 @@ function onSubmitSearchImages(e) {
       }
 
       galleryEl.innerHTML = templateFunction(data.hits);
+      lightbox = new SimpleLightbox('.gallery a');
 
       if (data.hits.length >= paxabeyApi.perPage) {
         btnLoadMoreEl.classList.remove('is-hidden');
       }
-
-      let lightbox = new SimpleLightbox('.gallery a');
     })
     .catch(error => {
       console.log(error);
@@ -54,19 +56,21 @@ function onClickLoadMoreBtn(e) {
   paxabeyApi
     .searchImage(inputValue)
     .then(({ data } = {}) => {
-      perPage += data.hits.length;
+      perPageSum += data.hits.length;
 
       galleryEl.insertAdjacentHTML('beforeend', templateFunction(data.hits));
 
-      if (perPage === data.totalHits) {
+      lightbox.refresh();
+
+      console.log(perPageSum);
+      console.log(data.totalHits);
+
+      if (perPageSum === data.totalHits) {
         btnLoadMoreEl.classList.add('is-hidden');
         return Notify.info(
           "We're sorry, but you've reached the end of search results."
         );
       }
-
-      let lightbox = new SimpleLightbox('.gallery a');
-      lightbox.refresh();
     })
     .catch(error => {
       console.log(error);
