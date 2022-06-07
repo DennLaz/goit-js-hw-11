@@ -94,9 +94,6 @@ async function onClickLoadMoreBtn(e) {
 
     lightbox.refresh();
 
-    console.log(perPageSum);
-    console.log(data.totalHits);
-
     if (perPageSum >= data.totalHits) {
       btnLoadMoreEl.classList.add('is-hidden');
       return Notify.info(
@@ -110,15 +107,11 @@ async function onClickLoadMoreBtn(e) {
   // paxabeyApi
   //   .searchImage(inputValue)
   //   .then(({ data } = {}) => {
-  //     console.log(data);
   // perPageSum += data.hits.length;
 
   // galleryEl.insertAdjacentHTML('beforeend', templateFunction(data.hits));
 
   // lightbox.refresh();
-
-  // console.log(perPageSum);
-  // console.log(data.totalHits);
 
   // if (perPageSum >= data.totalHits) {
   //   btnLoadMoreEl.classList.add('is-hidden');
