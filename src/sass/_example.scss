@@ -24,6 +24,12 @@ body {
   padding-right: 15px;
   margin-left: auto;
   margin-right: auto;
-  background-image: url(../images/1618604244_9-funart_pro-p-oboi-fon-fon-na-zadnii-plan-9.jpg);
-  background-size: cover;
+  background-color: #f0f2f3;
+  background: -webkit-radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background: radial-gradient(
+    rgba(0, 0, 0, 0.15) 1px,
+    rgba(216, 217, 219, 0.28) 1px
+  );
+  -webkit-background-size: 8px 8px;
+  background-size: 8px 8px;
 }
